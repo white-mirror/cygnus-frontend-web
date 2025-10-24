@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "DS-Digital";
+    src: url("/fonts/DS-DIGI.TTF") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "DS-Digital";
+    src: url("/fonts/DS-DIGIB.TTF") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    color-scheme: light;
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --background: #f4f7fb;
+    --surface: #ffffff;
+    --surface-soft: #f8faff;
+    --surface-subtle: #eef4ff;
+    --border-soft: #d8deea;
+    --border-strong: #c0c8da;
+    --text-primary: #1f2d3d;
+    --text-secondary: #546580;
+    --text-muted: #8594ad;
+    --shadow-elevated: 0 24px 60px rgba(31, 48, 94, 0.12);
+    --accent-color: 43, 139, 255;
+    --confirm-accent: 43, 139, 255;
+    --surface-glass: rgba(255, 255, 255, 0.82);
+    --surface-input: rgba(255, 255, 255, 0.9);
+    --background-gradient:
+      radial-gradient(
+        120% 120% at 15% 10%,
+        rgba(43, 139, 255, 0.12),
+        transparent 65%
+      ),
+      radial-gradient(
+        120% 140% at 85% 0%,
+        rgba(255, 120, 71, 0.12),
+        transparent 65%
+      ),
+      var(--background);
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --background: #0f172a;
+    --surface: #111c2f;
+    --surface-soft: #16233b;
+    --surface-subtle: #1d2b45;
+    --border-soft: #22324d;
+    --border-strong: #30405c;
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5f5;
+    --text-muted: #93a1c1;
+    --shadow-elevated: 0 24px 60px rgba(6, 12, 24, 0.55);
+    --surface-glass: rgba(17, 28, 47, 0.88);
+    --surface-input: rgba(22, 35, 59, 0.94);
+    --background-gradient:
+      radial-gradient(
+        120% 120% at 15% 10%,
+        rgba(43, 139, 255, 0.22),
+        transparent 65%
+      ),
+      radial-gradient(
+        120% 140% at 85% 0%,
+        rgba(255, 120, 71, 0.16),
+        transparent 65%
+      ),
+      var(--background);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply m-0 min-h-screen min-w-[320px] bg-background text-[color:var(--text-primary)] transition-colors duration-200;
+    display: flex;
+    flex-direction: column;
+    background-image: var(--background-gradient);
+  }
+
+  #root {
+    @apply w-full flex-1;
+  }
+
+  a {
+    color: inherit;
+    @apply no-underline transition;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    @apply cursor-pointer border-none bg-transparent transition;
+    font: inherit;
+    color: inherit;
+  }
+
+  button:focus-visible {
+    outline: 2px solid rgb(var(--accent-color));
+    outline-offset: 3px;
+  }
+
+  button:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  @media (max-width: 760px) {
+    #root {
+      @apply min-h-screen;
+    }
+  }
+}
+
+@layer components {
+  .digital-display {
+    font-family:
+      "DS-Digital",
+      "Orbitron",
+      "Share Tech Mono",
+      "IBM Plex Mono",
+      monospace;
+    letter-spacing: normal;
+  }
+}
