@@ -643,7 +643,7 @@ export const useControlPanel = (): UseControlPanelResult => {
       return;
     }
 
-    const source = new EventSource(EVENT_SOURCE_URL);
+    const source = new EventSource(EVENT_SOURCE_URL, { withCredentials: true });
     eventSourceRef.current = source;
 
     const handleUpdate = (event: MessageEvent) => {
