@@ -116,24 +116,16 @@ export const LoginPage = (): JSX.Element => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(var(--accent-color),0.15),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(255,120,71,0.1),transparent_60%)]" />
       </div>
 
-      <div className="relative z-10 flex w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] shadow-xl shadow-black/5 backdrop-blur-xl md:flex-row md:border-transparent md:bg-[var(--surface-glass)]">
-        <section className="flex w-full flex-col gap-6 px-6 py-10 sm:px-10 lg:px-16">
-          <div className="flex items-center gap-3">
+      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] px-6 py-10 shadow-xl shadow-black/5 backdrop-blur-xl sm:px-10">
+        <section className="flex w-full flex-col items-center gap-6">
+          <div className="flex items-center justify-center">
             <Logo
-              className="h-12 w-auto select-none"
+              className="h-16 w-auto select-none"
               accentColor="rgb(var(--accent-color))"
               outlineColor="var(--border-soft)"
               strokeWidth={8}
               aria-label="Cygnus"
             />
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
-                Plataforma Cygnus
-              </span>
-              <span className="text-base font-semibold text-[color:var(--text-secondary)]">
-                Clima inteligente para cada espacio
-              </span>
-            </div>
           </div>
 
           <div className="flex flex-col gap-2 text-left">
@@ -143,14 +135,10 @@ export const LoginPage = (): JSX.Element => {
             <h1 className="text-3xl font-bold sm:text-4xl">
               Ingresá a tu panel de Cygnus
             </h1>
-            <p className="max-w-md text-sm leading-relaxed text-[color:var(--text-secondary)] sm:text-base">
-              Controlá tus dispositivos desde un solo lugar. Iniciá sesión con tu
-              cuenta corporativa para continuar.
-            </p>
           </div>
 
           <form
-            className="mt-2 flex flex-col gap-5"
+            className="mt-2 flex w-full max-w-md flex-col gap-5"
             onSubmit={(event) => {
               void handleSubmit(event);
             }}
@@ -225,42 +213,7 @@ export const LoginPage = (): JSX.Element => {
               {isAuthenticating ? "Ingresando..." : "Ingresar"}
             </button>
           </form>
-
-          <p className="text-xs text-[color:var(--text-muted)]">
-            Si necesitás crear o restablecer tu usuario, contactá al equipo de soporte.
-          </p>
         </section>
-
-        <aside className="hidden flex-1 flex-col justify-between gap-6 bg-gradient-to-br from-[rgba(var(--accent-color),0.12)] via-transparent to-[rgba(255,120,71,0.14)] px-10 py-12 md:flex">
-          <div className="flex flex-col gap-4">
-            <div className="inline-flex items-center gap-3 rounded-full border border-[rgba(var(--accent-color),0.25)] bg-[var(--surface-glass)] px-4 py-2 text-sm font-semibold text-[rgba(var(--accent-color),0.95)] shadow-sm backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-[rgb(var(--accent-color))]" />
-              Sesión segura activada
-            </div>
-            <h2 className="text-2xl font-semibold text-[color:var(--text-primary)]">
-              Monitoreá, ajustá y automatizá tu clima.
-            </h2>
-            <p className="text-sm leading-relaxed text-[color:var(--text-secondary)]">
-              Accedé al panel de control para cambiar modos, revisar temperatura en
-              tiempo real y coordinar tu hogar inteligente desde donde estés.
-            </p>
-          </div>
-
-          <div className="relative flex h-48 items-center justify-center overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] shadow-lg backdrop-blur">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--accent-color),0.35),transparent_60%),radial-gradient(circle_at_80%_70%,rgba(255,120,71,0.25),transparent_70%)]" />
-            <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-              <span className="digital-display text-5xl font-semibold text-[rgba(var(--accent-color),0.95)]">
-                22°
-              </span>
-              <span className="rounded-full bg-white/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[color:var(--text-secondary)]">
-                Comfort Mode
-              </span>
-              <p className="max-w-[220px] text-xs text-[color:var(--text-secondary)]">
-                Ajustamos tus equipos para mantener la temperatura ideal todo el día.
-              </p>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   );
