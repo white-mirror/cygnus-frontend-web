@@ -9,6 +9,7 @@ import {
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "../../lib/cn";
+import { Logo } from "../brand/Logo";
 
 type PanelHeaderProps = {
   title: string;
@@ -94,11 +95,12 @@ export const PanelHeader: FC<PanelHeaderProps> = ({
               <span className="w-10" aria-hidden="true" />
             )}
 
-            <img
-              src="/cygnus-logo.png"
-              alt="Cygnus"
+            <Logo
               className="h-9 w-auto select-none"
-              draggable={false}
+              accentColor="rgb(var(--accent-color))"
+              outlineColor="var(--border-soft)"
+              strokeWidth={8}
+              aria-hidden="true"
             />
 
             <h1 className="text-lg font-semibold text-[color:var(--text-primary)] sm:text-xl">

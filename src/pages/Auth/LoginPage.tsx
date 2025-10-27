@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import { isUnauthorizedError } from "../../api/errors";
+import { Logo } from "../../components/brand/Logo";
 import { useAuth } from "../../features/auth/useAuth";
 
 type FieldErrors = {
@@ -118,11 +119,12 @@ export const LoginPage = (): JSX.Element => {
       <div className="relative z-10 flex w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] shadow-xl shadow-black/5 backdrop-blur-xl md:flex-row md:border-transparent md:bg-[var(--surface-glass)]">
         <section className="flex w-full flex-col gap-6 px-6 py-10 sm:px-10 lg:px-16">
           <div className="flex items-center gap-3">
-            <img
-              src="/cygnus-logo.png"
-              alt="Cygnus"
+            <Logo
               className="h-12 w-auto select-none"
-              draggable={false}
+              accentColor="rgb(var(--accent-color))"
+              outlineColor="var(--border-soft)"
+              strokeWidth={8}
+              aria-label="Cygnus"
             />
             <div className="flex flex-col">
               <span className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
