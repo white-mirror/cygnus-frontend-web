@@ -55,11 +55,13 @@ const OPTION_RING_CLASSES =
   "focus-visible:ring-[rgba(var(--accent-color),0.35)]";
 
 const ICON_BASE_CLASSES =
-  "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent text-[rgb(var(--accent-color))]";
+  "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent";
+const ICON_DEFAULT_COLOR_CLASSES = "text-[rgb(var(--accent-color))]";
 const ICON_APPLIED_CLASSES =
   "border-t-transparent border-l-transparent border-r-transparent border-dashed rounded-none border-b-[color:(var(--mode-accent))]";
 const ICON_PENDING_CLASSES =
-  "border-[rgb(var(--accent-color))] text-[rgb(var(--mode-accent))]";
+  "border-[rgb(var(--accent-color))]";
+const ICON_SELECTED_CLASSES = "text-[color:var(--text-primary)]";
 
 const LABEL_BASE_CLASSES =
   "text-sm font-semibold tracking-wide text-[var(--text-primary)]";
@@ -114,6 +116,7 @@ export const FanSelector = ({
 
           const iconClasses = cn(
             ICON_BASE_CLASSES,
+            isSelected ? ICON_SELECTED_CLASSES : ICON_DEFAULT_COLOR_CLASSES,
             isInactive && "opacity-50",
             isApplied && ICON_APPLIED_CLASSES,
             isPending && ICON_PENDING_CLASSES,
