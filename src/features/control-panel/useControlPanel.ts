@@ -223,20 +223,25 @@ export const useControlPanel = (): UseControlPanelResult => {
         fallbackTemperature,
       );
 
-      setBaselineState(control);
       setLiveTemperature(temperature);
       setStatusMessage(null);
       setErrorMessage(null);
 
-      if (modeSupportsTargetTemperature(control.mode)) {
-        lastTargetTemperatureRef.current = control.temperature;
+      const shouldUpdateBaseline =
+        matchesPending || !hasPendingChangesRef.current;
+
+      if (shouldUpdateBaseline) {
+        setBaselineState(control);
+        if (modeSupportsTargetTemperature(control.mode)) {
+          lastTargetTemperatureRef.current = control.temperature;
+        }
       }
 
       if (matchesPending) {
         setIsUpdatingDevice(false);
       }
 
-      const shouldSyncControl = matchesPending || !hasPendingChangesRef.current;
+      const shouldSyncControl = shouldUpdateBaseline;
 
       setControlState((prev) => {
         if (!prev || shouldSyncControl) {
