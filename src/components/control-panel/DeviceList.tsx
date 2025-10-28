@@ -113,7 +113,7 @@ export const DeviceList: FC<DeviceListProps> = ({
               onClick={() => onSelect(device.deviceId)}
               disabled={isBusy && device.deviceId !== selectedDeviceId}
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex w-full items-center justify-between gap-4">
                 <span className="text-lg font-semibold text-[color:var(--text-primary)]">
                   {device.deviceName}
                 </span>
