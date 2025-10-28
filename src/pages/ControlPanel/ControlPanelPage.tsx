@@ -294,7 +294,7 @@ export const ControlPanelPage = (): JSX.Element => {
 
   const controlSection = (
     <section className="flex w-full flex-col gap-6 max-w-full lg:max-w-[500px]">
-      <div className="flex h-full w-full flex-col rounded-3xl border-none bg-[var(--surface)]/92 backdrop-blur-md shadow-sm">
+      <div className="flex h-full w-full flex-col rounded-3xl border-none">
         <header className="flex flex-col gap-2 pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex w-full items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -329,7 +329,9 @@ export const ControlPanelPage = (): JSX.Element => {
             <span className="text-xs font-semibold tracking-wide text-[color:var(--text-muted)]">
               {statusMessage}
             </span>
-          ) : null}
+          ) : (
+          <span className="h-4"/>
+            )}
         </header>
 
         <div className="flex flex-col gap-4 p-0">

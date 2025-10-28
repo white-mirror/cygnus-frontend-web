@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "../../lib/cn";
 import { Logo } from "../brand/Logo";
+import { ACCENT_OFF } from "../../features/control-panel/constants";
 
 type PanelHeaderProps = {
   title: string;
@@ -79,42 +80,44 @@ export const PanelHeader: FC<PanelHeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--border-soft)] bg-[var(--surface)]/92 backdrop-blur-xl">
-      <div className="flex w-full flex-col gap-3 px-1 py-1 sm:px-6 sm:py-2 lg:px-8 lg:py-4">
+      <div className="flex w-full flex-col gap-3 px-4 py-2 sm:px-6 sm:py-2 lg:px-8 lg:py-4">
         <div className="flex w-full flex-wrap items-center gap-3">
           <div className="flex flex-1 items-center gap-3">
             {showBackButton && typeof onBack === "function" ? (
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--border-soft)] text-[color:var(--text-primary)] transition hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent-color))] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]"
+                className="inline-flex h-10 w-10 items-center justify-start rounded-full border border-[color:var(--border-soft)] text-[color:var(--text-primary)] transition hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent-color))] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)]"
                 aria-label="Volver"
                 onClick={onBack}
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="h-4 w-4" />
               </button>
             ) : (
-              <span className="w-10" aria-hidden="true" />
+              <span className="w-10 h-10 lg:hidden" aria-hidden="true" />
             )}
 
-            <Logo
-              className="h-9 w-auto select-none"
-              accentColor="rgb(var(--accent-color))"
-              outlineColor="var(--border-soft)"
-              strokeWidth={8}
-              aria-hidden="true"
-            />
+            <div className="hidden items-center gap-3 lg:flex">
+              <Logo
+                className="h-10 w-10 select-none"
+                accentColor="rgb(var(--accent-color))"
+                outlineColor={`rgb(${ACCENT_OFF})`}
+                strokeWidth={!isDarkMode ? 10 : 0}
+                aria-hidden="true"
+              />
+            </div>
 
-            <h1 className="text-lg font-semibold text-[color:var(--text-primary)] sm:text-xl">
+            <h1 className="flex-1 text-center text-lg font-semibold text-[color:var(--text-primary)] sm:text-xl">
               {title}
             </h1>
           </div>
 
-          <div className="ml-auto flex shrink-0 items-center gap-3 pr-2">
+          <div className="ml-auto flex shrink-0 items-center gap-3">
             <div ref={menuRef} className="relative">
               <button
                 type="button"
                 className={cn(
                   actionBaseClasses,
-                  "h-12 w-12 rounded-full border-transparent text-[color:var(--text-secondary)] p-0",
+                  "h-10 w-10 rounded-full border-transparent text-[color:var(--text-secondary)] p-0",
                   isUserMenuOpen ? "bg-[var(--surface-subtle)]" : "hover:bg-[var(--surface)]",
                 )}
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
