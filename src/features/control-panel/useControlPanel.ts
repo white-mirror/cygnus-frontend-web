@@ -117,6 +117,7 @@ export const useControlPanel = (): UseControlPanelResult => {
   );
   const [controlState, setControlState] = useState<ControlState | null>(null);
   const [baselineState, setBaselineState] = useState<ControlState | null>(null);
+  const baselineStateRef = useRef<ControlState | null>(null);
   const [liveTemperature, setLiveTemperature] = useState<number | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -134,6 +135,10 @@ export const useControlPanel = (): UseControlPanelResult => {
   useEffect(() => {
     selectedDeviceIdRef.current = selectedDeviceId;
   }, [selectedDeviceId]);
+
+  useEffect(() => {
+    baselineStateRef.current = baselineState;
+  }, [baselineState]);
 
   const persistSelection = useCallback(
     (homeId: number | null, deviceId: number | null): void => {
@@ -552,13 +557,35 @@ export const useControlPanel = (): UseControlPanelResult => {
       lastTargetTemperatureRef.current,
     );
 
-    if (modeSupportsTargetTemperature(control.mode)) {
-      lastTargetTemperatureRef.current = control.temperature;
+    setLiveTemperature(temperature);
+
+    const shouldUpdateStructures =
+      !hasPendingChangesRef.current || !baselineStateRef.current;
+
+    if (shouldUpdateStructures) {
+      setBaselineState((prev) => {
+        if (
+          prev &&
+          prev.powerOn === control.powerOn &&
+          prev.mode === control.mode &&
+          prev.fanSpeed === control.fanSpeed &&
+          prev.temperature === control.temperature
+        ) {
+          return prev;
+        }
+        return control;
+      });
+      if (modeSupportsTargetTemperature(control.mode)) {
+        lastTargetTemperatureRef.current = control.temperature;
+      }
     }
 
-    setControlState(control);
-    setBaselineState(control);
-    setLiveTemperature(temperature);
+    setControlState((prev) => {
+      if (!prev || shouldUpdateStructures) {
+        return control;
+      }
+      return prev;
+    });
   }, [selectedDevice]);
 
   const controlsDisabled = controlState === null || isUpdatingDevice;
