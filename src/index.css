@@ -21,7 +21,12 @@
 
   :root {
     color-scheme: light;
-    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      "Inter",
+      "Segoe UI",
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -139,11 +144,7 @@
 @layer components {
   .digital-display {
     font-family:
-      "DS-Digital",
-      "Orbitron",
-      "Share Tech Mono",
-      "IBM Plex Mono",
-      monospace;
+      "DS-Digital", "Orbitron", "Share Tech Mono", "IBM Plex Mono", monospace;
     letter-spacing: normal;
   }
 }

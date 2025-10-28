@@ -118,7 +118,9 @@ export const PanelHeader: FC<PanelHeaderProps> = ({
                 className={cn(
                   actionBaseClasses,
                   "h-10 w-10 rounded-full border-transparent text-[color:var(--text-secondary)] p-0",
-                  isUserMenuOpen ? "bg-[var(--surface-subtle)]" : "hover:bg-[var(--surface)]",
+                  isUserMenuOpen
+                    ? "bg-[var(--surface-subtle)]"
+                    : "hover:bg-[var(--surface)]",
                 )}
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
                 aria-haspopup="menu"

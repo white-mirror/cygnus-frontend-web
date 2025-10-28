@@ -87,7 +87,11 @@ export const TemperatureCard: FC<TemperatureCardProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-4 rounded-2xl ml-auto text-[color:var(--text-primary)]" role="group" aria-label="Control de temperatura objetivo">
+          <div
+            className="flex items-center gap-4 rounded-2xl ml-auto text-[color:var(--text-primary)]"
+            role="group"
+            aria-label="Control de temperatura objetivo"
+          >
             <div className="flex flex-col gap-1">
               <div className="flex items-baseline gap-2">
                 <span className="digital-display text-8xl font-semibold leading-none text-[rgb(var(--accent-color))] sm:text-9xl">

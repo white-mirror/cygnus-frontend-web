@@ -70,12 +70,7 @@ export const MODE_TO_API: Record<Mode, ModeSetting> = {
 };
 
 const MODES_WITH_TARGET_TEMPERATURE = new Set<Mode>(["auto", "cool", "heat"]);
-const MODES_WITH_FAN_CONTROL = new Set<Mode>([
-  "auto",
-  "cool",
-  "heat",
-  "fan",
-]);
+const MODES_WITH_FAN_CONTROL = new Set<Mode>(["auto", "cool", "heat", "fan"]);
 
 export const modeSupportsTargetTemperature = (mode: Mode): boolean => {
   if (mode === "off") {

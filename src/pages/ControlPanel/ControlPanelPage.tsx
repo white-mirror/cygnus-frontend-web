@@ -221,7 +221,7 @@ export const ControlPanelPage = (): JSX.Element => {
         "--accent-color": accentColor,
         "--confirm-accent": confirmAccentColor,
       }) as CSSProperties,
-    [accentColor, confirmAccentColor]
+    [accentColor, confirmAccentColor],
   );
 
   const applyButtonStyle = useMemo(
@@ -229,7 +229,7 @@ export const ControlPanelPage = (): JSX.Element => {
       ({
         "--action-accent": confirmAccentColor,
       }) as CSSProperties,
-    [confirmAccentColor]
+    [confirmAccentColor],
   );
 
   const selectedHomeName = selectedHome ? formatHomeName(selectedHome) : null;
@@ -330,8 +330,8 @@ export const ControlPanelPage = (): JSX.Element => {
               {statusMessage}
             </span>
           ) : (
-          <span className="h-4"/>
-            )}
+            <span className="h-4" />
+          )}
         </header>
 
         <div className="flex flex-col gap-4 p-0">

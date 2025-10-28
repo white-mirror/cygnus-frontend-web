@@ -10,7 +10,10 @@ import {
   MODE_LABELS,
 } from "../../features/control-panel/constants";
 import type { Mode } from "../../features/control-panel/types";
-import { formatTemperatureWithDegree, resolveMode } from "../../features/control-panel/utils";
+import {
+  formatTemperatureWithDegree,
+  resolveMode,
+} from "../../features/control-panel/utils";
 import { cn } from "../../lib/cn";
 
 type DeviceListProps = {

@@ -36,7 +36,10 @@ const mapError = async (response: Response): Promise<never> => {
   throw new ApiError(message, response.status);
 };
 
-export const login = async (email: string, password: string): Promise<AuthUser> => {
+export const login = async (
+  email: string,
+  password: string,
+): Promise<AuthUser> => {
   const response = await fetch(`${AUTH_BASE}/login`, {
     method: "POST",
     headers: {

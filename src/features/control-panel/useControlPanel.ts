@@ -154,8 +154,7 @@ export const useControlPanel = (): UseControlPanelResult => {
       : lastTargetTemperatureRef.current
     : lastTargetTemperatureRef.current;
   const previewMode: Mode = controlState?.mode ?? actualMode;
-  const temperatureControlVisible =
-    modeSupportsTargetTemperature(previewMode);
+  const temperatureControlVisible = modeSupportsTargetTemperature(previewMode);
   const fanControlVisible = modeSupportsFanControl(previewMode);
 
   const accentColor = useMemo(() => {
@@ -174,9 +173,7 @@ export const useControlPanel = (): UseControlPanelResult => {
     return ACCENT_BY_MODE[previewMode as Exclude<Mode, "off">];
   }, [previewMode]);
 
-  const pendingCommandsRef = useRef<Map<string, PendingCommand>>(
-    new Map(),
-  );
+  const pendingCommandsRef = useRef<Map<string, PendingCommand>>(new Map());
   const eventSourceRef = useRef<EventSource | null>(null);
   const hasPendingChangesRef = useRef(false);
 
@@ -192,9 +189,7 @@ export const useControlPanel = (): UseControlPanelResult => {
 
       if (homeId === selectedHomeId) {
         setDevices((prev) => {
-          const exists = prev.some(
-            (item) => item.deviceId === device.deviceId,
-          );
+          const exists = prev.some((item) => item.deviceId === device.deviceId);
 
           if (!exists) {
             return [...prev, device];
@@ -241,8 +236,7 @@ export const useControlPanel = (): UseControlPanelResult => {
         setIsUpdatingDevice(false);
       }
 
-      const shouldSyncControl =
-        matchesPending || !hasPendingChangesRef.current;
+      const shouldSyncControl = matchesPending || !hasPendingChangesRef.current;
 
       setControlState((prev) => {
         if (!prev || shouldSyncControl) {
@@ -310,7 +304,7 @@ export const useControlPanel = (): UseControlPanelResult => {
         currentSelected !== null &&
         sorted.some((device) => device.deviceId === currentSelected)
           ? currentSelected
-          : sorted[0]?.deviceId ?? null;
+          : (sorted[0]?.deviceId ?? null);
 
       if (selectedDeviceIdRef.current !== resolvedDeviceId) {
         setSelectedDeviceId(resolvedDeviceId);
@@ -650,10 +644,17 @@ export const useControlPanel = (): UseControlPanelResult => {
       try {
         const payload = JSON.parse(event.data) as DeviceUpdateEventPayload;
         if (applySnapshotRef.current) {
-          applySnapshotRef.current(payload.homeId, payload.device, payload.jobId ?? null);
+          applySnapshotRef.current(
+            payload.homeId,
+            payload.device,
+            payload.jobId ?? null,
+          );
         }
       } catch (error) {
-        console.error("[control-panel] Error parsing device update event", error);
+        console.error(
+          "[control-panel] Error parsing device update event",
+          error,
+        );
       }
     };
 
@@ -664,7 +665,10 @@ export const useControlPanel = (): UseControlPanelResult => {
           handleCommandErrorRef.current(payload);
         }
       } catch (error) {
-        console.error("[control-panel] Error parsing command error event", error);
+        console.error(
+          "[control-panel] Error parsing command error event",
+          error,
+        );
       }
     };
 
@@ -672,8 +676,9 @@ export const useControlPanel = (): UseControlPanelResult => {
     source.addEventListener("command-error", handleErrorEvent);
 
     source.onerror = () => {
-      setStatusMessage((prev) =>
-        prev ?? "Conexión en tiempo real interrumpida. Reintentando...",
+      setStatusMessage(
+        (prev) =>
+          prev ?? "Conexión en tiempo real interrumpida. Reintentando...",
       );
       setIsUpdatingDevice(false);
     };
@@ -954,10 +959,7 @@ export const useControlPanel = (): UseControlPanelResult => {
   }, []);
 
   const resetChanges = useCallback(() => {
-    if (
-      baselineState &&
-      modeSupportsTargetTemperature(baselineState.mode)
-    ) {
+    if (baselineState && modeSupportsTargetTemperature(baselineState.mode)) {
       lastTargetTemperatureRef.current = baselineState.temperature;
     }
 

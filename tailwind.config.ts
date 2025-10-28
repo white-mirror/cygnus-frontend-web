@@ -16,7 +16,8 @@ const config: Config = {
         "text-secondary": "var(--text-secondary)",
         "text-muted": "var(--text-muted)",
         accent: "rgb(var(--accent-color) / <alpha-value>)",
-        confirm: "rgb(var(--confirm-accent, var(--accent-color)) / <alpha-value>)",
+        confirm:
+          "rgb(var(--confirm-accent, var(--accent-color)) / <alpha-value>)",
       },
       fontFamily: {
         sans: [

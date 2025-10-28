@@ -42,11 +42,12 @@ export const LoginPage = (): JSX.Element => {
   const { login, isAuthenticating } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>({
-    email: false,
-    password: false,
-  });
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>(
+    {
+      email: false,
+      password: false,
+    },
+  );
   const [formError, setFormError] = useState<string | null>(null);
 
   const validateFields = useCallback(
@@ -83,14 +84,14 @@ export const LoginPage = (): JSX.Element => {
       ...prev,
       [field]: true,
     }));
-    setFieldErrors(errors);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     setTouched({ email: true, password: true });
     const currentErrors = validateFields(email, password);
-    setFieldErrors(currentErrors);
 
     if (currentErrors.email || currentErrors.password) {
       return;
@@ -167,7 +168,9 @@ export const LoginPage = (): JSX.Element => {
                 }`}
               />
               {touched.email && errors.email ? (
-                <span className="text-xs font-medium text-red-500">{errors.email}</span>
+                <span className="text-xs font-medium text-red-500">
+                  {errors.email}
+                </span>
               ) : null}
             </div>
 
