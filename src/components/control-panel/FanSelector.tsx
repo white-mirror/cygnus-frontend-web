@@ -56,7 +56,7 @@ const OPTION_RING_CLASSES =
 
 const ICON_BASE_CLASSES =
   "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent";
-const ICON_DEFAULT_COLOR_CLASSES = "text-[rgb(var(--accent-color))]";
+const ICON_ACCENT_COLOR_CLASSES = "text-[rgb(var(--accent-color))]";
 const ICON_APPLIED_CLASSES =
   "border-t-transparent border-l-transparent border-r-transparent border-dashed rounded-none border-b-[color:(var(--mode-accent))]";
 const ICON_PENDING_CLASSES =
@@ -114,9 +114,12 @@ export const FanSelector = ({
               ? "Ventilador automatico"
               : `Velocidad ${option.label}`;
 
+          const iconColorClasses =
+            isSelected && !isApplied ? ICON_SELECTED_CLASSES : ICON_ACCENT_COLOR_CLASSES;
+
           const iconClasses = cn(
             ICON_BASE_CLASSES,
-            isSelected ? ICON_SELECTED_CLASSES : ICON_DEFAULT_COLOR_CLASSES,
+            iconColorClasses,
             isInactive && "opacity-50",
             isApplied && ICON_APPLIED_CLASSES,
             isPending && ICON_PENDING_CLASSES,
