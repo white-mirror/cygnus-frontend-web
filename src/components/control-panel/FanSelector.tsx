@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { CSSProperties, JSX } from "react";
 
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,7 +56,7 @@ export const FanSelector = ({
       variant === "card" &&
         "rounded-3xl rounded-t-none rounded-b-none border border-t-0 border-[color:var(--border-soft)] bg-[var(--surface)]/90 p-4 backdrop-blur-md sm:p-6",
       variant === "section" && "border-none px-4",
-      className,
+      className
     )}
   >
     <header className="flex flex-col gap-1">
@@ -67,19 +67,19 @@ export const FanSelector = ({
 
     <div className="flex flex-row justify-between gap-3 w-min ml-auto">
       {FAN_OPTIONS.map((option) => {
-        const isActive = actualFanSpeed === option.id;
         const isSelected = pendingFanSpeed === option.id;
-        const isPending =
-          pendingFanSpeed !== null &&
-          pendingFanSpeed === option.id &&
-          pendingFanSpeed !== actualFanSpeed;
-        const isInactive = !isSelected && !isActive;
-        const iconHighlightStyle = isPending
+        const isApplied = actualFanSpeed === option.id;
+        const isPendingSelection = isSelected && !isApplied;
+        const isInactive = !isSelected && !isApplied;
+        const iconHighlightStyle = isPendingSelection
           ? { borderColor: "rgb(var(--accent-color))" }
           : undefined;
-        const labelHighlightStyle = isPending
-          ? { color: "rgb(var(--accent-color))" }
+        const labelHighlightStyle = isPendingSelection
+          ? { color: "rgb(var(--mode-accent))" }
           : undefined;
+        const optionStyle = {
+          "--mode-accent": "--accent-color",
+        } as CSSProperties;
 
         const accessibilityLabel =
           option.id === "auto"
@@ -91,10 +91,11 @@ export const FanSelector = ({
             key={option.id}
             type="button"
             className={cn(
-              "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed",
+              "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed"
             )}
+            style={optionStyle}
             onClick={() => onSelect(option.id)}
-            aria-pressed={isSelected || isActive}
+            aria-pressed={isSelected}
             aria-label={accessibilityLabel}
             title={accessibilityLabel}
             disabled={controlsDisabled}
@@ -103,8 +104,11 @@ export const FanSelector = ({
               className={cn(
                 "flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent text-[rgb(var(--accent-color))]",
                 isInactive && "opacity-50",
-                isActive &&
-                  "border-t-0 border-l-0 border-r-0 border-dashed rounded-none border-[color:(var(--mode-accent))]",
+                isApplied &&
+                  "border-t-transparent border-l-transparent border-r-transparent border-dashed rounded-none border-b-[color:(var(--mode-accent))]",
+                isSelected &&
+                  !isApplied &&
+                  "border-[rgb(var(--accent-color))] text-[rgb(var(--mode-accent))]"
               )}
               style={iconHighlightStyle}
             >
@@ -119,7 +123,7 @@ export const FanSelector = ({
               <span
                 className={cn(
                   "text-sm font-semibold tracking-wide text-[var(--text-primary)]",
-                  isInactive && "opacity-50",
+                  isInactive && "opacity-50"
                 )}
                 style={labelHighlightStyle}
               >
