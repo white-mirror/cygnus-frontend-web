@@ -75,7 +75,7 @@ export const ModeSelector = ({
         variant === "card" &&
           "rounded-3xl rounded-b-none border border-b-0 border-[color:var(--border-soft)] bg-[var(--surface)]/90 p-4 backdrop-blur-md sm:p-6",
         variant === "section" && "border-none px-4",
-        className,
+        className
       )}
       style={selectorStyle}
     >
@@ -94,6 +94,14 @@ export const ModeSelector = ({
           const iconHighlightStyle = isPendingSelection
             ? { borderColor: "rgb(var(--mode-accent))" }
             : undefined;
+          // const iconHighlightStyle = isPendingSelection
+          //   ? {
+          //       borderColor: "rgb(var(--mode-accent))",
+          //       borderRadius: "0",
+          //       borderStyle: "dashed",
+          //       borderWidth: "0 0 2px 0",
+          //     }
+          //   : undefined;
           const labelHighlightStyle = isPendingSelection
             ? { color: "rgb(var(--mode-accent))" }
             : undefined;
@@ -106,7 +114,7 @@ export const ModeSelector = ({
               key={option.id}
               type="button"
               className={cn(
-                "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--mode-accent),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed",
+                "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--mode-accent),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed"
               )}
               style={optionStyle}
               onClick={() => onSelect(option.id)}
@@ -117,6 +125,7 @@ export const ModeSelector = ({
                 className={cn(
                   "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent text-[rgb(var(--mode-accent))]",
                   isInactive && "opacity-50",
+                  isApplied && "border-t-0 border-l-0 border-r-0 border-dashed rounded-none border-[color:(var(--mode-accent))]"
                 )}
                 style={iconHighlightStyle}
                 title={option.label}
@@ -130,8 +139,8 @@ export const ModeSelector = ({
 
               <span
                 className={cn(
-                  "text-xs font-semibold tracking-wide text-white",
-                  isInactive && "opacity-50",
+                  "text-xs font-semibold tracking-wide text-[var(--text-primary)]",
+                  isInactive && "opacity-50"
                 )}
                 style={labelHighlightStyle}
               >

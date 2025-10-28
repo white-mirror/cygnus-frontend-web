@@ -56,7 +56,7 @@ export const FanSelector = ({
       variant === "card" &&
         "rounded-3xl rounded-t-none rounded-b-none border border-t-0 border-[color:var(--border-soft)] bg-[var(--surface)]/90 p-4 backdrop-blur-md sm:p-6",
       variant === "section" && "border-none px-4",
-      className,
+      className
     )}
   >
     <header className="flex flex-col gap-1">
@@ -91,7 +91,7 @@ export const FanSelector = ({
             key={option.id}
             type="button"
             className={cn(
-              "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed",
+              "flex h-full w-full flex-col items-center justify-center gap-1 rounded-2xl border border-[color:var(--border-soft)] text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed"
             )}
             onClick={() => onSelect(option.id)}
             aria-pressed={isSelected || isActive}
@@ -103,6 +103,8 @@ export const FanSelector = ({
               className={cn(
                 "flex h-10 w-10 items-center justify-center rounded-full border-2 border-transparent text-[rgb(var(--accent-color))]",
                 isInactive && "opacity-50",
+                isActive &&
+                  "border-t-0 border-l-0 border-r-0 border-dashed rounded-none border-[color:(var(--mode-accent))]"
               )}
               style={iconHighlightStyle}
             >
@@ -116,8 +118,8 @@ export const FanSelector = ({
             <span className="flex flex-col items-center gap-1">
               <span
                 className={cn(
-                  "text-sm font-semibold tracking-wide text-white",
-                  isInactive && "opacity-50",
+                  "text-sm font-semibold tracking-wide text-[var(--text-primary)]",
+                  isInactive && "opacity-50"
                 )}
                 style={labelHighlightStyle}
               >

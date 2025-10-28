@@ -210,7 +210,7 @@ export const LoginPage = (): JSX.Element => {
 
             <button
               type="submit"
-              className="mt-2 inline-flex items-center justify-center rounded-full bg-[rgb(var(--accent-color))] px-6 py-3 text-base font-semibold text-white shadow-[0_14px_30px_rgba(43,139,255,0.28)] transition hover:bg-[rgba(var(--accent-color),0.92)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-[rgb(var(--accent-color))] px-6 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[0_14px_30px_rgba(43,139,255,0.28)] transition hover:bg-[rgba(var(--accent-color),0.92)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={!isValid || isAuthenticating}
             >
               {isAuthenticating ? "Ingresando..." : "Ingresar"}
