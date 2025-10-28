@@ -1,4 +1,5 @@
 import { withApiOrigin } from "./config";
+import { storeDesktopSessionToken, withDesktopAuth } from "./desktopSession";
 import { ApiError, UnauthorizedError } from "./errors";
 
 export interface AuthUser {
@@ -7,6 +8,7 @@ export interface AuthUser {
 
 interface LoginResponse {
   user: AuthUser;
+  sessionToken?: string;
 }
 
 interface MeResponse {
@@ -40,28 +42,33 @@ export const login = async (
   email: string,
   password: string,
 ): Promise<AuthUser> => {
-  const response = await fetch(`${AUTH_BASE}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${AUTH_BASE}/login`,
+    withDesktopAuth({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }),
+  );
 
   if (!response.ok) {
     await mapError(response);
   }
 
   const data = (await response.json()) as LoginResponse;
+  storeDesktopSessionToken(data.sessionToken ?? null);
   return data.user;
 };
 
 export const fetchCurrentUser = async (): Promise<AuthUser> => {
-  const response = await fetch(`${AUTH_BASE}/me`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${AUTH_BASE}/me`,
+    withDesktopAuth({
+      method: "GET",
+    }),
+  );
 
   if (!response.ok) {
     await mapError(response);
@@ -72,12 +79,16 @@ export const fetchCurrentUser = async (): Promise<AuthUser> => {
 };
 
 export const logout = async (): Promise<void> => {
-  const response = await fetch(`${AUTH_BASE}/logout`, {
-    method: "POST",
-    credentials: "include",
-  });
+  const response = await fetch(
+    `${AUTH_BASE}/logout`,
+    withDesktopAuth({
+      method: "POST",
+    }),
+  );
 
   if (!response.ok) {
     await mapError(response);
   }
+
+  storeDesktopSessionToken(null);
 };

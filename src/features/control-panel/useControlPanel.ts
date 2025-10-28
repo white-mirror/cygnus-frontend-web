@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
-  BGH_EVENTS_URL,
+  resolveBghEventsUrl,
   fetchDeviceStatus,
   fetchDevices,
   fetchHomes,
@@ -50,8 +50,6 @@ type PendingCommand = {
   homeId: number;
   deviceId: number;
 };
-
-const EVENT_SOURCE_URL = BGH_EVENTS_URL;
 
 export interface ControlPanelHandlers {
   selectHome: (homeId: number | null) => void;
@@ -669,7 +667,9 @@ export const useControlPanel = (): UseControlPanelResult => {
       return;
     }
 
-    const source = new EventSource(EVENT_SOURCE_URL, { withCredentials: true });
+    const source = new EventSource(resolveBghEventsUrl(), {
+      withCredentials: true,
+    });
     eventSourceRef.current = source;
 
     const handleUpdate = (event: MessageEvent) => {
