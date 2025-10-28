@@ -94,14 +94,6 @@ export const ModeSelector = ({
           const iconHighlightStyle = isPendingSelection
             ? { borderColor: "rgb(var(--mode-accent))" }
             : undefined;
-          // const iconHighlightStyle = isPendingSelection
-          //   ? {
-          //       borderColor: "rgb(var(--mode-accent))",
-          //       borderRadius: "0",
-          //       borderStyle: "dashed",
-          //       borderWidth: "0 0 2px 0",
-          //     }
-          //   : undefined;
           const labelHighlightStyle = isPendingSelection
             ? { color: "rgb(var(--mode-accent))" }
             : undefined;

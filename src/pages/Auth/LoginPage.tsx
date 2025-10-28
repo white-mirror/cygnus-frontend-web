@@ -124,7 +124,7 @@ export const LoginPage = (): JSX.Element => {
               className="h-16 w-auto select-none"
               accentColor="rgb(var(--accent-color))"
               outlineColor="var(--border-soft)"
-              strokeWidth={8}
+              strokeWidth={15}
               aria-label="Cygnus"
             />
           </div>
