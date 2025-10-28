@@ -59,7 +59,7 @@ export const DeviceList: FC<DeviceListProps> = ({
     </div>
 
     <div className="flex-1 overflow-y-auto pr-1">
-      <div className="grid gap-3">
+      <div className="grid gap-3 p-1">
         {isLoading && (
           <span className="rounded-2xl border border-dashed border-[color:var(--border-soft)] bg-[var(--surface)] py-6 text-center text-sm text-[color:var(--text-muted)]">
             Cargando equipos...
@@ -87,11 +87,14 @@ export const DeviceList: FC<DeviceListProps> = ({
               : null;
 
           const buttonClasses = cn(
-            "group relative flex w-full flex-col gap-4 rounded-2xl border border-[color:var(--border-soft)] bg-[var(--surface)]/95 p-4 text-left transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--device-accent),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-soft)] transform-gpu will-change-transform",
+            "group relative flex w-full flex-col gap-4 rounded-2xl border-2 border-solid border-transparent bg-[var(--surface)]/95 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--device-accent),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-soft)] transform-gpu will-change-transform",
             isActive &&
-              "border-[rgba(var(--device-accent),0.45)] bg-[rgba(var(--device-accent),0.12)]",
-            deviceMode === "off" &&
-              !isActive &&
+              "border-[rgb(var(--device-accent))] bg-[rgba(var(--device-accent),0.12)]",
+            isActive &&
+              deviceMode === "off" &&
+              "bg-[rgba(84,101,128,0.12)]",
+            !isActive &&
+              deviceMode === "off" &&
               "bg-[rgba(84,101,128,0.08)] text-[color:var(--text-secondary)]",
           );
 
