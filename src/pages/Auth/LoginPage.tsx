@@ -121,9 +121,7 @@ export const LoginPage = (): JSX.Element => {
       <div className="relative z-10 flex w-full max-w-3xl flex-col items-center overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] px-6 py-10 shadow-xl shadow-black/5 backdrop-blur-xl transition-all duration-300 sm:px-10">
         <section
           className={`flex w-full flex-col items-center gap-6 transition-all duration-300 ${
-            isAuthenticating
-              ? "pointer-events-none blur-[1px] saturate-75"
-              : ""
+            isAuthenticating ? "pointer-events-none blur-[1px] saturate-75" : ""
           }`}
         >
           <div className="flex items-center justify-center">

@@ -90,9 +90,7 @@ export const DeviceList: FC<DeviceListProps> = ({
             "group relative flex w-full flex-col gap-4 rounded-2xl border-2 border-solid border-transparent bg-[var(--surface)]/95 p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--device-accent),0.35)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-soft)] transform-gpu will-change-transform",
             isActive &&
               "border-[rgb(var(--device-accent))] bg-[rgba(var(--device-accent),0.12)]",
-            isActive &&
-              deviceMode === "off" &&
-              "bg-[rgba(84,101,128,0.12)]",
+            isActive && deviceMode === "off" && "bg-[rgba(84,101,128,0.12)]",
             !isActive &&
               deviceMode === "off" &&
               "bg-[rgba(84,101,128,0.08)] text-[color:var(--text-secondary)]",
