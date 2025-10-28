@@ -61,6 +61,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const login = useCallback(
     async (email: string, password: string): Promise<AuthUser> => {
+      setIsInitialising(true);
       setIsAuthenticating(true);
       try {
         await loginRequest(email, password);
