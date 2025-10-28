@@ -1,9 +1,7 @@
 import {
-  createContext,
   type FC,
   type PropsWithChildren,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -17,17 +15,7 @@ import {
 } from "../../api/auth";
 import { isUnauthorizedError } from "../../api/errors";
 
-type AuthContextValue = {
-  user: AuthUser | null;
-  isInitialising: boolean;
-  isAuthenticating: boolean;
-  login: (email: string, password: string) => Promise<AuthUser>;
-  logout: () => Promise<void>;
-  refreshUser: () => Promise<AuthUser | null>;
-};
-
-const AuthContext = createContext<AuthContextValue | null>(null);
-
+import { AuthContext, type AuthContextValue } from "./context";
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isInitialising, setIsInitialising] = useState<boolean>(true);
@@ -113,11 +101,3 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuthContext = (): AuthContextValue => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
-  }
-  return ctx;
-};
