@@ -98,10 +98,11 @@ export const LoginPage = (): JSX.Element => {
     }
 
     try {
+      setFormError(null);
       await login(email.trim(), password);
     } catch (error) {
       if (isUnauthorizedError(error)) {
-        setFormError("Email o contraseña incorrectos.");
+        setFormError(error.message || "Email o contraseña incorrectos.");
         return;
       }
       console.error("[login] Unexpected error", error);
@@ -117,8 +118,12 @@ export const LoginPage = (): JSX.Element => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(var(--accent-color),0.15),transparent_55%),radial-gradient(circle_at_85%_15%,rgba(255,120,71,0.1),transparent_60%)]" />
       </div>
 
-      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] px-6 py-10 shadow-xl shadow-black/5 backdrop-blur-xl sm:px-10">
-        <section className="flex w-full flex-col items-center gap-6">
+      <div className="relative z-10 flex w-full max-w-3xl flex-col items-center overflow-hidden rounded-3xl border border-[color:var(--border-soft)] bg-[var(--surface-glass)] px-6 py-10 shadow-xl shadow-black/5 backdrop-blur-xl transition-all duration-300 sm:px-10">
+        <section
+          className={`flex w-full flex-col items-center gap-6 transition-all duration-300 ${
+            isAuthenticating ? "pointer-events-none blur-[1px] saturate-75" : ""
+          }`}
+        >
           <div className="flex items-center justify-center">
             <Logo
               className="h-16 w-auto select-none"
@@ -212,11 +217,34 @@ export const LoginPage = (): JSX.Element => {
               type="submit"
               className="mt-2 inline-flex items-center justify-center rounded-full bg-[rgb(var(--accent-color))] px-6 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[0_14px_30px_rgba(43,139,255,0.28)] transition hover:bg-[rgba(var(--accent-color),0.92)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(var(--accent-color),0.4)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={!isValid || isAuthenticating}
+              aria-busy={isAuthenticating}
             >
               {isAuthenticating ? "Ingresando..." : "Ingresar"}
             </button>
           </form>
         </section>
+        <div
+          className={`absolute inset-0 z-20 flex items-center justify-center bg-[rgba(6,12,24,0.35)] backdrop-blur-md transition-opacity duration-300 ${
+            isAuthenticating
+              ? "pointer-events-auto opacity-100"
+              : "pointer-events-none opacity-0"
+          }`}
+          aria-hidden={!isAuthenticating}
+        >
+          <div
+            className="flex flex-col items-center gap-3 rounded-2xl border border-[rgba(255,255,255,0.12)] bg-[rgba(12,22,44,0.65)] px-6 py-5 text-center text-[color:var(--text-primary)] shadow-lg shadow-black/20"
+            role="status"
+            aria-live="polite"
+          >
+            <div
+              className="h-10 w-10 animate-spin rounded-full border-4 border-[rgba(255,255,255,0.35)] border-t-[rgb(var(--accent-color))]"
+              aria-hidden="true"
+            />
+            <p className="text-sm font-medium text-[rgba(255,255,255,0.85)]">
+              Validando tus credenciales...
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

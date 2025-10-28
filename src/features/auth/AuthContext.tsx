@@ -13,7 +13,7 @@ import {
   logout as logoutRequest,
   type AuthUser,
 } from "../../api/auth";
-import { isUnauthorizedError } from "../../api/errors";
+import { UnauthorizedError, isUnauthorizedError } from "../../api/errors";
 
 import { AuthContext, type AuthContextValue } from "./context";
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -63,15 +63,19 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     async (email: string, password: string): Promise<AuthUser> => {
       setIsAuthenticating(true);
       try {
-        const authenticatedUser = await loginRequest(email, password);
-        setUser(authenticatedUser);
+        await loginRequest(email, password);
+        const authenticatedUser = await refreshUser();
+
+        if (!authenticatedUser) {
+          throw new UnauthorizedError();
+        }
+
         return authenticatedUser;
       } finally {
         setIsAuthenticating(false);
-        setIsInitialising(false);
       }
     },
-    [],
+    [refreshUser],
   );
 
   const logout = useCallback(async (): Promise<void> => {
