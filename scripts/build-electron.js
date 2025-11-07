@@ -96,7 +96,7 @@ function resolveBuildNumber() {
     return Math.trunc(parsed);
   }
 
-  const seed = Number(process.env.BUILD_NUMBER_SEED ?? '20000');
+  const seed = Number(process.env.BUILD_NUMBER_SEED ?? '0');
   if (!Number.isFinite(seed)) {
     throw new Error('[electron-build] BUILD_NUMBER_SEED debe ser un número válido.');
   }
