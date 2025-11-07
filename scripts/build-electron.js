@@ -8,8 +8,10 @@ import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const projectRoot = path.resolve(path.dirname(__filename), '..');
-const releaseRoot = path.join(projectRoot, 'release');
-const buildMetadataPath = path.join(releaseRoot, 'build-number.json');
+const repoRoot = path.resolve(projectRoot, '..', '..');
+const moduleReleaseRoot = path.join(projectRoot, 'release');
+const sharedReleaseRoot = path.join(repoRoot, 'release');
+const buildMetadataPath = path.join(sharedReleaseRoot, 'build-number.json');
 
 function parseVariant(argv) {
   let value;
@@ -114,7 +116,7 @@ function resolveBuildNumber() {
   }
 
   const nextNumber = Math.trunc(lastNumber) + 1;
-  fs.mkdirSync(releaseRoot, { recursive: true });
+  fs.mkdirSync(sharedReleaseRoot, { recursive: true });
   fs.writeFileSync(buildMetadataPath, `${JSON.stringify({ lastNumber: nextNumber }, null, 2)}\n`, 'utf8');
   return nextNumber;
 }
@@ -163,7 +165,7 @@ function main() {
   const appVersion = readPackageVersion();
   const buildNumber = resolveBuildNumber();
   const releaseDirName = `${variant}-${appVersion}.${buildNumber}`;
-  const releaseOutputDir = path.join(releaseRoot, releaseDirName);
+  const releaseOutputDir = path.join(moduleReleaseRoot, releaseDirName);
   const relativeReleaseOutput = path.relative(projectRoot, releaseOutputDir) || releaseDirName;
   const builderOutputArg = `--config.directories.output=${relativeReleaseOutput.split(path.sep).join('/')}`;
 
