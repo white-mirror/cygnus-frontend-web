@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+release/
+*.asar
+*.dmg
+*.exe
+*.msi
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +28,8 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Environment variables files
+.env
+.env.local
+.env.production
