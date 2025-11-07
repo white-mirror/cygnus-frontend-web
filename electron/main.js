@@ -45,6 +45,24 @@ function createMainWindow() {
     }
   });
 
+  if (!isDev) {
+    mainWindow.setMenu(null);
+    mainWindow.setMenuBarVisibility(false);
+    mainWindow.webContents.on('devtools-opened', () => {
+      mainWindow.webContents.closeDevTools();
+    });
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+      const key = (input.key || '').toLowerCase();
+      const isDevToolsShortcut =
+        key === 'f12' ||
+        ((input.control || input.meta) && input.shift && (key === 'i' || key === 'j'));
+
+      if (isDevToolsShortcut) {
+        event.preventDefault();
+      }
+    });
+  }
+
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };
