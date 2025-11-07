@@ -38,7 +38,7 @@ function createMainWindow() {
     height: 720,
     icon: fs.existsSync(windowIconPath) ? windowIconPath : undefined,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false

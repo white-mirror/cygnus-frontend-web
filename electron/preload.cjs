@@ -1,5 +1,5 @@
-import { contextBridge } from 'electron';
-import { loadRuntimeConfig } from './runtime-config.js';
+const { contextBridge } = require('electron');
+const { loadRuntimeConfig } = require('./runtime-config.cjs');
 
 const { variant = 'prod', apiBaseUrl = null } = loadRuntimeConfig();
 
