@@ -18,7 +18,7 @@ El proyecto incluye una configuración mínima de Electron para generar paquetes
 1. Duplica los archivos `.env.local.example` y `.env.production.example` según la variante que necesites (`.env.local`, `.env.production`) y ajusta `VITE_API_BASE_URL`.
 2. Ejecuta `npm run electron:build -- --variant prod` para empaquetar contra el backend de producción (por defecto).
 3. Ejecuta `npm run electron:build -- --variant local` para empaquetar utilizando las variables definidas en `.env.local`.
-4. Los instaladores se generan dentro de `release/`. El nombre del artefacto incluye la variante para facilitar su identificación.
+4. Cada build genera un número incremental y coloca todos los artefactos dentro de `release/<variant>-<version>.<build>` (por ejemplo, `release/prod-0.0.1.20001/`). El contador se guarda en `release/build-number.json` y puede inicializarse con `BUILD_NUMBER_SEED` (por defecto arranca en 20000) o forzarse puntualmente mediante `BUILD_NUMBER`.
 5. Puedes reemplazar `assets/images/logo.png` y `assets/images/logo.ico` para ajustar el icono de la ventana y del instalador.
 
 Los comandos `electron:build:*` registran en consola todas las variables `VITE_*` activas antes de iniciar el proceso, para que puedas confirmar qué backend se usará en cada variante. Internamente se usa un modo de Vite propio para cada variante, por lo que no es necesario crear archivos `.env.electron-*`; basta con mantener `.env.local` y `.env.production`.

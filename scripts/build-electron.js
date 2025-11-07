@@ -8,6 +8,8 @@ import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const projectRoot = path.resolve(path.dirname(__filename), '..');
+const releaseRoot = path.join(projectRoot, 'release');
+const buildMetadataPath = path.join(releaseRoot, 'build-number.json');
 
 function parseVariant(argv) {
   let value;
@@ -48,12 +50,14 @@ function loadEnvironmentFiles(envProfile) {
   return loadedFiles;
 }
 
-function logEnvironment(variant, envProfile, viteMode, loadedFiles) {
+function logEnvironment({ variant, envProfile, viteMode, loadedFiles, buildNumber, releaseDir }) {
   console.log('==========================================');
   console.log(`[electron-build] Variante seleccionada : ${variant}`);
   console.log(`[electron-build] Perfil de entorno     : ${envProfile}`);
   console.log(`[electron-build] Vite mode             : ${viteMode}`);
   console.log(`[electron-build] Archivos .env cargados: ${loadedFiles.length > 0 ? loadedFiles.join(', ') : 'ninguno'}`);
+  console.log(`[electron-build] Build number          : ${buildNumber}`);
+  console.log(`[electron-build] Carpeta de salida     : ${releaseDir}`);
 
   const keysOfInterest = Object.keys(process.env)
     .filter((key) => key.startsWith('VITE_') || key === 'APP_VARIANT')
@@ -70,12 +74,59 @@ function logEnvironment(variant, envProfile, viteMode, loadedFiles) {
   console.log('==========================================');
 }
 
-function writeVariantManifest(variant) {
+function readPackageVersion() {
+  const packageJsonPath = path.join(projectRoot, 'package.json');
+  try {
+    const contents = fs.readFileSync(packageJsonPath, 'utf8');
+    const parsed = JSON.parse(contents);
+    return typeof parsed.version === 'string' ? parsed.version : '0.0.0';
+  } catch (error) {
+    console.warn('[electron-build] No se pudo leer package.json, se usará la versión 0.0.0', error);
+    return '0.0.0';
+  }
+}
+
+function resolveBuildNumber() {
+  const explicitBuildNumber = process.env.BUILD_NUMBER;
+  if (explicitBuildNumber) {
+    const parsed = Number(explicitBuildNumber);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      throw new Error('[electron-build] BUILD_NUMBER debe ser un número mayor a 0.');
+    }
+    return Math.trunc(parsed);
+  }
+
+  const seed = Number(process.env.BUILD_NUMBER_SEED ?? '20000');
+  if (!Number.isFinite(seed)) {
+    throw new Error('[electron-build] BUILD_NUMBER_SEED debe ser un número válido.');
+  }
+
+  let lastNumber = seed;
+  try {
+    if (fs.existsSync(buildMetadataPath)) {
+      const metadata = JSON.parse(fs.readFileSync(buildMetadataPath, 'utf8'));
+      if (Number.isFinite(metadata.lastNumber)) {
+        lastNumber = Number(metadata.lastNumber);
+      }
+    }
+  } catch (error) {
+    console.warn('[electron-build] No se pudo leer el contador de builds, se regenerará.', error);
+  }
+
+  const nextNumber = Math.trunc(lastNumber) + 1;
+  fs.mkdirSync(releaseRoot, { recursive: true });
+  fs.writeFileSync(buildMetadataPath, `${JSON.stringify({ lastNumber: nextNumber }, null, 2)}\n`, 'utf8');
+  return nextNumber;
+}
+
+function writeVariantManifest({ variant, buildNumber, appVersion }) {
   const outputPath = path.join(projectRoot, 'dist', 'electron-variant.json');
   const payload = {
     variant,
     apiBaseUrl: process.env.VITE_API_BASE_URL ?? null,
-    generatedAt: new Date().toISOString()
+    generatedAt: new Date().toISOString(),
+    buildNumber,
+    appVersion
   };
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -109,21 +160,37 @@ function main() {
   const envProfile = variant === 'prod' ? 'production' : variant;
   const viteMode = `electron-${variant}`;
   const loadedEnvFiles = loadEnvironmentFiles(envProfile);
+  const appVersion = readPackageVersion();
+  const buildNumber = resolveBuildNumber();
+  const releaseDirName = `${variant}-${appVersion}.${buildNumber}`;
+  const releaseOutputDir = path.join(releaseRoot, releaseDirName);
+  const relativeReleaseOutput = path.relative(projectRoot, releaseOutputDir) || releaseDirName;
+  const builderOutputArg = `--config.directories.output=${relativeReleaseOutput.split(path.sep).join('/')}`;
 
   const sharedEnv = {
     ...process.env,
-    APP_VARIANT: variant
+    APP_VARIANT: variant,
+    APP_BUILD_NUMBER: String(buildNumber),
+    APP_VERSION: appVersion
   };
 
-  logEnvironment(variant, envProfile, viteMode, loadedEnvFiles);
+  logEnvironment({
+    variant,
+    envProfile,
+    viteMode,
+    loadedFiles: loadedEnvFiles,
+    buildNumber,
+    releaseDir: path.relative(projectRoot, releaseOutputDir)
+  });
 
   runCommand('npm', ['run', 'build:web', '--', '--mode', viteMode], sharedEnv);
 
-  writeVariantManifest(variant);
+  writeVariantManifest({ variant, buildNumber, appVersion });
 
-  runCommand('npx', ['electron-builder', '--win', '--publish', 'never'], sharedEnv);
+  fs.mkdirSync(releaseOutputDir, { recursive: true });
+  runCommand('npx', ['electron-builder', '--win', '--publish', 'never', builderOutputArg], sharedEnv);
 
-  console.log('[electron-build] Paquete generado en la carpeta "release".');
+  console.log(`[electron-build] Paquete generado en "${path.relative(projectRoot, releaseOutputDir)}".`);
 }
 
 try {
