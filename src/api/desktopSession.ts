@@ -1,12 +1,35 @@
 const DESKTOP_SESSION_STORAGE_KEY = "cygnus-desktop-session-token";
 
+let inMemoryToken: string | null = null;
+
 const isDesktopEnvironment = (): boolean =>
   typeof window !== "undefined" && Boolean(window.cygnusDesktop);
+
+const readSessionStorageToken = (): string | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.sessionStorage.getItem(DESKTOP_SESSION_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const ensureTokenLoaded = (): void => {
+  if (inMemoryToken !== null) {
+    return;
+  }
+  inMemoryToken = readSessionStorageToken();
+};
 
 export const storeDesktopSessionToken = (token: string | null): void => {
   if (!isDesktopEnvironment()) {
     return;
   }
+
+  inMemoryToken = token;
 
   try {
     if (!token) {
@@ -24,11 +47,8 @@ export const getDesktopSessionToken = (): string | null => {
     return null;
   }
 
-  try {
-    return window.sessionStorage.getItem(DESKTOP_SESSION_STORAGE_KEY);
-  } catch {
-    return null;
-  }
+  ensureTokenLoaded();
+  return inMemoryToken;
 };
 
 export const withDesktopAuth = (init: RequestInit = {}): RequestInit => {
