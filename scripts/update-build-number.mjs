@@ -12,7 +12,7 @@ try {
   const buildNumber = generate();
   const raw = await readFile(packageJsonPath, "utf8");
   const pkg = JSON.parse(raw);
-  pkg.build = buildNumber;
+  pkg.buildNumber = buildNumber;
   await writeFile(packageJsonPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
   console.log(`[versioning] Build number set to ${buildNumber}`);
 } catch (error) {

@@ -29,5 +29,5 @@ El proceso de escritorio expone en `window.cygnusDesktop` la configuración util
 
 - Los commits (salvo los que comiencen con `wip:` o merges) activan un hook que ejecuta `npm run format`, `npm run lint`, `npm run typecheck` y `npm run build`. Si alguno falla, el commit se cancela.
 - El hook interpreta el prefijo del commit (Conv. Commits): `feat` incrementa el minor, `fix` y el resto el patch, y `!`/`BREAKING CHANGE` elevan el major. El versionado se aplica directamente en `package.json`/`package-lock.json`.
-- Cada build actualiza el campo `build` en `package.json` usando `build-number-generator`, por lo que la versión efectiva queda como `major.minor.patch.build`.
+- Cada build actualiza el campo `buildNumber` en `package.json` usando `build-number-generator`, por lo que la versión efectiva queda como `major.minor.patch.build`.
 - Ejecutá `npm install` para que Husky instale los hooks vía `npm run prepare`. Si necesitás saltarte las validaciones usá `wip:` como prefijo del commit.
