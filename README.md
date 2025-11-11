@@ -24,3 +24,10 @@ El proyecto incluye una configuración mínima de Electron para generar paquetes
 Los comandos `electron:build:*` registran en consola todas las variables `VITE_*` activas antes de iniciar el proceso, para que puedas confirmar qué backend se usará en cada variante. Internamente se usa un modo de Vite propio para cada variante, por lo que no es necesario crear archivos `.env.electron-*`; basta con mantener `.env.local` y `.env.production`.
 
 El proceso de escritorio expone en `window.cygnusDesktop` la configuración utilizada (`config.apiBaseUrl` y `variant`), lo que permite a la aplicación web resolver el backend activo y persistir la sesión.
+
+## Versionado automático
+
+- Los commits (salvo los que comiencen con `wip:` o merges) activan un hook que ejecuta `npm run format`, `npm run lint`, `npm run typecheck` y `npm run build`. Si alguno falla, el commit se cancela.
+- El hook interpreta el prefijo del commit (Conv. Commits): `feat` incrementa el minor, `fix` y el resto el patch, y `!`/`BREAKING CHANGE` elevan el major. El versionado se aplica directamente en `package.json`/`package-lock.json`.
+- Cada build actualiza el campo `build` en `package.json` usando `build-number-generator`, por lo que la versión efectiva queda como `major.minor.patch.build`.
+- Ejecutá `npm install` para que Husky instale los hooks vía `npm run prepare`. Si necesitás saltarte las validaciones usá `wip:` como prefijo del commit.

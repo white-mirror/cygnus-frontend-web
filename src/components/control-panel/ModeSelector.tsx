@@ -140,7 +140,11 @@ export const ModeSelector = ({
               aria-pressed={isSelected}
               disabled={controlsDisabled}
             >
-              <span className={iconClasses} style={iconHighlightStyle} title={option.label}>
+              <span
+                className={iconClasses}
+                style={iconHighlightStyle}
+                title={option.label}
+              >
                 <FontAwesomeIcon
                   icon={option.icon}
                   className="h-5 w-5"

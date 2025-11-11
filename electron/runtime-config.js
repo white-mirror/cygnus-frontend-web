@@ -1,4 +1,4 @@
-import runtimeConfig from './runtime-config.cjs';
+import runtimeConfig from "./runtime-config.cjs";
 
 const { loadRuntimeConfig, getManifestPath } = runtimeConfig;
 
