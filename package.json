@@ -1,12 +1,12 @@
 {
   "name": "@cygnus/frontend-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
   "main": "electron/main.js",
   "description": "Interfaz web de Cygnus basada en React y Vite.",
   "author": "Nicolás Panaino",
-  "buildNumber": "251111658",
+  "buildNumber": "251111669",
   "scripts": {
     "dev": "vite",
     "host": "vite --host",
