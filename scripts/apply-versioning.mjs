@@ -114,22 +114,14 @@ try {
   }
 
   bumpVersion(metadata.releaseType);
-  stageFiles(
-    ["package.json", "package-lock.json"].filter((file) =>
-      existsSync(path.join(projectRoot, file)),
-    ),
-  );
+  stageFiles(["package.json", "package-lock.json"]);
 
   runScript("build", {
     ...process.env,
     CYGNUS_SKIP_VERSIONING: "1",
   });
 
-  stageFiles(
-    ["package.json", "package-lock.json"].filter((file) =>
-      existsSync(path.join(projectRoot, file)),
-    ),
-  );
+  stageFiles(["package.json", "package-lock.json"]);
 
   const amendResult = spawnSync("git", ["commit", "--amend", "--no-edit"], {
     stdio: "inherit",
