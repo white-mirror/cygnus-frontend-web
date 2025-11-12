@@ -59,8 +59,7 @@ const ICON_BASE_CLASSES =
 const ICON_ACCENT_COLOR_CLASSES = "text-[rgb(var(--accent-color))]";
 const ICON_APPLIED_CLASSES =
   "border-t-transparent border-l-transparent border-r-transparent border-dashed rounded-none border-b-[color:(var(--mode-accent))]";
-const ICON_PENDING_CLASSES =
-  "border-[rgb(var(--accent-color))]";
+const ICON_PENDING_CLASSES = "border-[rgb(var(--accent-color))]";
 const ICON_SELECTED_CLASSES = "text-[color:var(--text-primary)]";
 
 const LABEL_BASE_CLASSES =
@@ -115,7 +114,9 @@ export const FanSelector = ({
               : `Velocidad ${option.label}`;
 
           const iconColorClasses =
-            isSelected && !isApplied ? ICON_SELECTED_CLASSES : ICON_ACCENT_COLOR_CLASSES;
+            isSelected && !isApplied
+              ? ICON_SELECTED_CLASSES
+              : ICON_ACCENT_COLOR_CLASSES;
 
           const iconClasses = cn(
             ICON_BASE_CLASSES,

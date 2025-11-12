@@ -35,4 +35,11 @@ export default defineConfig([
       ],
     },
   },
+  {
+    files: ["electron/**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-var-requires": "off",
+    },
+  },
 ]);
