@@ -16,6 +16,7 @@ const windowIconPath = path.join(iconsDir, windowIconName);
 
 const runtimeConfig = loadRuntimeConfig();
 const appVariant = process.env.APP_VARIANT || runtimeConfig.variant || "prod";
+const isProdVariant = appVariant === "prod";
 const apiBaseUrl =
   runtimeConfig.apiBaseUrl || process.env.VITE_API_BASE_URL || null;
 
@@ -54,7 +55,7 @@ function createMainWindow() {
     },
   });
 
-  if (!isDev) {
+  if (!isDev && isProdVariant) {
     mainWindow.setMenu(null);
     mainWindow.setMenuBarVisibility(false);
     mainWindow.webContents.on("devtools-opened", () => {
@@ -72,6 +73,8 @@ function createMainWindow() {
         event.preventDefault();
       }
     });
+  } else if (!isDev) {
+    mainWindow.setMenuBarVisibility(true);
   }
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {

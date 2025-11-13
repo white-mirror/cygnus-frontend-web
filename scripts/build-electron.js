@@ -8,10 +8,7 @@ import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const projectRoot = path.resolve(path.dirname(__filename), "..");
-const repoRoot = path.resolve(projectRoot, "..", "..");
-const moduleReleaseRoot = path.join(projectRoot, "release");
-const sharedReleaseRoot = path.join(repoRoot, "release");
-const buildMetadataPath = path.join(sharedReleaseRoot, "build-number.json");
+const releaseRoot = path.join(projectRoot, "release");
 
 function parseVariant(argv) {
   let value;
@@ -57,6 +54,7 @@ function logEnvironment({
   envProfile,
   viteMode,
   loadedFiles,
+  version,
   buildNumber,
   releaseDir,
 }) {
@@ -67,7 +65,10 @@ function logEnvironment({
   console.log(
     `[electron-build] Archivos .env cargados: ${loadedFiles.length > 0 ? loadedFiles.join(", ") : "ninguno"}`,
   );
-  console.log(`[electron-build] Build number          : ${buildNumber}`);
+  console.log(`[electron-build] Versión               : ${version}`);
+  console.log(
+    `[electron-build] Build number          : ${buildNumber ?? "(sin definir)"}`,
+  );
   console.log(`[electron-build] Carpeta de salida     : ${releaseDir}`);
 
   const keysOfInterest = Object.keys(process.env)
@@ -87,63 +88,25 @@ function logEnvironment({
   console.log("==========================================");
 }
 
-function readPackageVersion() {
+function readPackageMetadata() {
   const packageJsonPath = path.join(projectRoot, "package.json");
   try {
     const contents = fs.readFileSync(packageJsonPath, "utf8");
     const parsed = JSON.parse(contents);
-    return typeof parsed.version === "string" ? parsed.version : "0.0.0";
+    return {
+      version: typeof parsed.version === "string" ? parsed.version : "0.0.0",
+      buildNumber:
+        typeof parsed.buildNumber === "string" && parsed.buildNumber.length > 0
+          ? parsed.buildNumber
+          : null,
+    };
   } catch (error) {
     console.warn(
       "[electron-build] No se pudo leer package.json, se usará la versión 0.0.0",
       error,
     );
-    return "0.0.0";
+    return { version: "0.0.0", buildNumber: null };
   }
-}
-
-function resolveBuildNumber() {
-  const explicitBuildNumber = process.env.BUILD_NUMBER;
-  if (explicitBuildNumber) {
-    const parsed = Number(explicitBuildNumber);
-    if (!Number.isFinite(parsed) || parsed <= 0) {
-      throw new Error(
-        "[electron-build] BUILD_NUMBER debe ser un número mayor a 0.",
-      );
-    }
-    return Math.trunc(parsed);
-  }
-
-  const seed = Number(process.env.BUILD_NUMBER_SEED ?? "0");
-  if (!Number.isFinite(seed)) {
-    throw new Error(
-      "[electron-build] BUILD_NUMBER_SEED debe ser un número válido.",
-    );
-  }
-
-  let lastNumber = seed;
-  try {
-    if (fs.existsSync(buildMetadataPath)) {
-      const metadata = JSON.parse(fs.readFileSync(buildMetadataPath, "utf8"));
-      if (Number.isFinite(metadata.lastNumber)) {
-        lastNumber = Number(metadata.lastNumber);
-      }
-    }
-  } catch (error) {
-    console.warn(
-      "[electron-build] No se pudo leer el contador de builds, se regenerará.",
-      error,
-    );
-  }
-
-  const nextNumber = Math.trunc(lastNumber) + 1;
-  fs.mkdirSync(sharedReleaseRoot, { recursive: true });
-  fs.writeFileSync(
-    buildMetadataPath,
-    `${JSON.stringify({ lastNumber: nextNumber }, null, 2)}\n`,
-    "utf8",
-  );
-  return nextNumber;
 }
 
 function writeVariantManifest({ variant, buildNumber, appVersion }) {
@@ -195,18 +158,24 @@ function main() {
   const envProfile = variant === "prod" ? "production" : variant;
   const viteMode = `electron-${variant}`;
   const loadedEnvFiles = loadEnvironmentFiles(envProfile);
-  const appVersion = readPackageVersion();
-  const buildNumber = resolveBuildNumber();
-  const releaseDirName = `${variant}-${appVersion}.${buildNumber}`;
-  const releaseOutputDir = path.join(moduleReleaseRoot, releaseDirName);
-  const relativeReleaseOutput =
-    path.relative(projectRoot, releaseOutputDir) || releaseDirName;
-  const builderOutputArg = `--config.directories.output=${relativeReleaseOutput.split(path.sep).join("/")}`;
-
   const sharedEnv = {
     ...process.env,
     APP_VARIANT: variant,
-    APP_BUILD_NUMBER: String(buildNumber),
+  };
+
+  runCommand("npm", ["run", "build:web", "--", "--mode", viteMode], sharedEnv);
+  runCommand("node", ["./scripts/update-build-number.mjs"], sharedEnv);
+
+  const { version: appVersion, buildNumber } = readPackageMetadata();
+  const normalizedBuildNumber = buildNumber ?? "0";
+  const releaseDirName = `${variant}-${appVersion}.${normalizedBuildNumber}`;
+  const releaseOutputDir = path.join(releaseRoot, releaseDirName);
+  const relativeReleaseOutput =
+    path.relative(projectRoot, releaseOutputDir) || releaseDirName;
+  const builderOutputArg = `--config.directories.output=${relativeReleaseOutput.split(path.sep).join("/")}`;
+  const buildEnv = {
+    ...sharedEnv,
+    APP_BUILD_NUMBER: normalizedBuildNumber,
     APP_VERSION: appVersion,
   };
 
@@ -215,19 +184,22 @@ function main() {
     envProfile,
     viteMode,
     loadedFiles: loadedEnvFiles,
-    buildNumber,
+    version: appVersion,
+    buildNumber: normalizedBuildNumber,
     releaseDir: path.relative(projectRoot, releaseOutputDir),
   });
 
-  runCommand("npm", ["run", "build:web", "--", "--mode", viteMode], sharedEnv);
-
-  writeVariantManifest({ variant, buildNumber, appVersion });
+  writeVariantManifest({
+    variant,
+    buildNumber: normalizedBuildNumber,
+    appVersion,
+  });
 
   fs.mkdirSync(releaseOutputDir, { recursive: true });
   runCommand(
     "npx",
     ["electron-builder", "--win", "--publish", "never", builderOutputArg],
-    sharedEnv,
+    buildEnv,
   );
 
   console.log(

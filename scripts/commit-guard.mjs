@@ -15,7 +15,8 @@ const projectRoot = path.resolve(path.dirname(__filename), "..");
 const gitDir = resolveGitDir();
 const metadataPath = path.join(gitDir, "cygnus-commit.json");
 
-const [, , messageFile] = process.argv;
+const messageFileRaw = process.argv[2] ?? "";
+const messageFile = messageFileRaw.replace(/\r$/, "");
 
 function resolveGitDir() {
   const gitPath = path.join(projectRoot, ".git");
